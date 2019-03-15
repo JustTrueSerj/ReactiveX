@@ -13,9 +13,9 @@ export class SearchBoxComponent implements OnInit {
 
   ngOnInit() {
     this.field.valueChanges.pipe(
-      distinctUntilChanged(),
       debounceTime(500),
-      filter((arg) => arg.length > 3))
+      distinctUntilChanged(),
+      filter((fieldValue) => fieldValue.length > 3))
 
       .subscribe(value => console.log(value));
   }
