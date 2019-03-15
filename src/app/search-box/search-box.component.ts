@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {Observable, of, timer} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {distinctUntilChanged, take, debounceTime, filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-box',
@@ -12,15 +12,11 @@ export class SearchBoxComponent implements OnInit {
   field = new FormControl('');
 
   ngOnInit() {
-    const arrOfLoggedWords = [];
+    this.field.valueChanges.pipe(
+      distinctUntilChanged(),
+      debounceTime(500),
+      filter((arg) => arg.length > 3))
 
-    this.field.valueChanges.subscribe(value => {
-      if ((value.length > 3) && (arrOfLoggedWords.every(arg => arg !== value))) {
-        timer(500)
-          .pipe(take(1))
-          .subscribe(() => console.log(value));
-      }
-      arrOfLoggedWords.push(value);
-    });
+      .subscribe(value => console.log(value));
   }
 }
