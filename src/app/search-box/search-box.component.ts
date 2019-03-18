@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {Observable, of, timer, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, take, debounceTime, filter, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap} from 'rxjs/operators';
 import {HttpService} from './Http.service';
 
 @Component({
@@ -22,13 +22,28 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
     this.field.valueChanges.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      filter((fieldValue) => fieldValue.length > 3),
+      filter(fieldValue => fieldValue > 3),
+      switchMap((fieldValue: string) => {
+        return this.http.loadVideosSuggestions(fieldValue);
+      }),
       takeUntil(this.destroy))
-      .subscribe((fieldValue) => this.http.getData(fieldValue).subscribe(httpResult => {
-        this.searchResults.length = 0;
-        this.searchResults = httpResult.items.map(res => res);
-        console.log(this.searchResults);
-      }));
+      .subscribe(httpResult => {
+          this.searchResults.length = 0;
+          this.searchResults = httpResult.items.map(res => res);
+          console.log(this.searchResults);
+        }
+      );
+
+    // this.field.valueChanges.pipe(
+    //   debounceTime(500),
+    //   distinctUntilChanged(),
+    //   filter((fieldValue) => fieldValue.length > 3),
+    //   takeUntil(this.destroy))
+    //   .subscribe((fieldValue$) => this.http.loadVideosSuggestions(fieldValue$).subscribe(httpResult => {
+    //     this.searchResults.length = 0;
+    //     this.searchResults = httpResult.items.map(res => res);
+    //     console.log(this.searchResults);
+    //   }));
   }
 
   ngOnDestroy() {
