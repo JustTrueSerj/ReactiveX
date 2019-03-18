@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {Observable, of, timer, ReplaySubject} from 'rxjs';
+import {Observable, of, timer, Subject, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap} from 'rxjs/operators';
 import {HttpService} from './Http.service';
 
@@ -11,7 +11,7 @@ import {HttpService} from './Http.service';
 })
 export class SearchBoxComponent implements OnInit, OnDestroy {
   field = new FormControl('');
-  destroy$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  destroy$: Subject<any> = new Subject<any>();
   searchResults = [];
 
   constructor(private http: HttpService) {
@@ -22,9 +22,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
       debounceTime(500),
       distinctUntilChanged(),
       filter(value => value > 3),
-      switchMap((value: string) => {
-        return this.http.loadVideosSuggestions(value);
-      }),
+      switchMap((value) => this.http.loadVideosSuggestions(value)),
       takeUntil(this.destroy$))
       .subscribe(httpResult => {
           this.searchResults = httpResult.items;
