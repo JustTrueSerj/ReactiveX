@@ -25,9 +25,8 @@ export class SearchBoxComponent implements OnInit {
       distinctUntilChanged(),
       filter(value => value > 3),
       switchMap(value => this.http.loadVideosSuggestions(value)),
-      map(value => {
+      map((value: ResponseResultModel) => {
         return value.items;
       }));
-    this.searchResults$.subscribe(x => console.log(x));
   }
 }
