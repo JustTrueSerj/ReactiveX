@@ -1,8 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {Observable, of, timer, Subject, ReplaySubject} from 'rxjs';
-import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap} from 'rxjs/operators';
+import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap, map} from 'rxjs/operators';
 import {HttpService} from './Http.service';
+import {AnonymousSubject} from 'rxjs/internal-compatibility';
+import {ResponseResultModel} from '../shared/response-result.model';
+import {ItemsModel} from '../shared/items.model';
 
 @Component({
   selector: 'app-search-box',
@@ -11,8 +14,7 @@ import {HttpService} from './Http.service';
 })
 export class SearchBoxComponent implements OnInit {
   field = new FormControl('');
-  destroy$: Subject<any> = new Subject<any>();
-  searchResults$: Observable<any>;
+  searchResults$: Observable<ItemsModel[]>;
 
   constructor(private http: HttpService) {
   }
@@ -22,7 +24,10 @@ export class SearchBoxComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       filter(value => value > 3),
-      switchMap((value) => this.http.loadVideosSuggestions(value)));
-    console.log(this.searchResults$);
+      switchMap(value => this.http.loadVideosSuggestions(value)),
+      map(value => {
+        return value.items;
+      }));
+    this.searchResults$.subscribe(x => console.log(x));
   }
 }
