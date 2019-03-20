@@ -4,7 +4,6 @@ import {Observable, of, timer, Subject, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap, map} from 'rxjs/operators';
 import {HttpService} from './Http.service';
 import {AnonymousSubject} from 'rxjs/internal-compatibility';
-import {ResponseResultModel} from '../shared/response-result.model';
 import {ItemsModel} from '../shared/items.model';
 
 @Component({
@@ -25,8 +24,13 @@ export class SearchBoxComponent implements OnInit {
       distinctUntilChanged(),
       filter(value => value > 3),
       switchMap(value => this.http.loadVideosSuggestions(value)),
-      map((value: ResponseResultModel) => {
-        return value.items;
+      map(value => {
+        return destruct(value);
       }));
+
+    function destruct({items}) {
+      return items;
+    }
+
   }
 }
