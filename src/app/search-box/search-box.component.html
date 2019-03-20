@@ -1,4 +1,4 @@
 <div class="content">
   <input type="search" [formControl]="field" name="name">
-  <div>{{searchResults$ | async}}</div>
+  <div *ngFor="let us of searchResults$ | async">{{us.id.videoId}}</div>
 </div>
