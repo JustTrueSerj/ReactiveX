@@ -5,11 +5,13 @@ import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap, 
 import {HttpService} from './Http.service';
 import {AnonymousSubject} from 'rxjs/internal-compatibility';
 import {ItemsModel} from '../shared/items.model';
+import {ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
   selector: 'app-search-box',
   templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
   field = new FormControl('');
