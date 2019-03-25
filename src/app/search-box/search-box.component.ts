@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {Observable, of, timer, Subject, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, debounceTime, filter, takeUntil, switchMap, map} from 'rxjs/operators';
-import {HttpService} from '../shared/Http.service';
+import {HttpService} from '../shared/http.service';
 import {AnonymousSubject} from 'rxjs/internal-compatibility';
 import {ItemsModel} from '../shared/items.model';
 import {ChangeDetectionStrategy} from '@angular/core';

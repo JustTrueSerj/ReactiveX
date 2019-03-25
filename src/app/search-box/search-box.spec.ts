@@ -2,7 +2,7 @@ import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {SearchBoxComponent} from './search-box.component';
 import {FormControl, FormsModule} from '@angular/forms';
-import {HttpService} from '../shared/Http.service';
+import {HttpService} from '../shared/http.service';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 
 describe('SearchBoxComponent', () => {
