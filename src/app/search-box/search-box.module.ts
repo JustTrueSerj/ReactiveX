@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {SearchBoxComponent} from './search-box.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FormsModule} from '@angular/forms';
-import {HttpService} from './Http.service';
+import {HttpService} from '../shared/Http.service';
 import {CommonModule} from '@angular/common';
 
 @NgModule({
