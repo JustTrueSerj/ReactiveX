@@ -1,31 +1,22 @@
 import {TestBed} from '@angular/core/testing';
-import {ItemsModel} from './items.model';
+import {HttpService} from './http.service';
 import {Observable, of} from 'rxjs';
 import {ResponseResultModel} from './response-result.model';
 
-class MockHttpService {
-  static loadVideosSuggestions(searchString: string): Observable<ResponseResultModel> {
-    console.log(searchString);
-    return of(expectedData);
-  }
-}
-
-const expectedData: ResponseResultModel = {
-  etag: '123',
-  items: null,
-  kind: '123',
-  nextPageToken: '123',
-  pageInfo: null,
-  regionCode: null
-};
-
-describe('Http Service', () => {
+describe('HttpService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: HttpService,
+          useValue: of({}) as Observable<ResponseResultModel>
+        }
+      ]
+    });
   });
-  it('should returns Observable of ItemsModel', () => {
-    MockHttpService.loadVideosSuggestions('123').subscribe((value) => {
-      expect(value).toEqual(expectedData);
+  it('Http returns Observable', () => {
+    HttpService.loadVideosSuggestions(123).subscribe( value => {
+      expect(value).toEqual(value as Observable<ResponseResultModel>);
     });
   });
 });
