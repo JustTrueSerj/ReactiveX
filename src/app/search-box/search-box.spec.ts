@@ -1,21 +1,31 @@
-import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
 
 import {SearchBoxComponent} from './search-box.component';
-import {FormControl, FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpService} from '../shared/http.service';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
+import {of} from 'rxjs';
 
 describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
-
+  const httpServiceMock = {
+    loadVideosSuggestions() {
+      return of({});
+    }
+  };
   beforeEach(async(() => {
+    spyOn(httpServiceMock, 'loadVideosSuggestions').and.returnValue(of({a: 10}));
     TestBed.configureTestingModule({
-      declarations: [ SearchBoxComponent ],
-      imports: [FormsModule, FormControl, BrowserDynamicTestingModule],
-      providers: [HttpService]
-    })
-      .compileComponents();
+      declarations: [SearchBoxComponent],
+      imports: [FormsModule, ReactiveFormsModule, BrowserDynamicTestingModule],
+      providers: [
+        {
+          provide: HttpService,
+          useValue: httpServiceMock
+        }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -23,7 +33,19 @@ describe('SearchBoxComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  // it('SearchBox result', inject([HttpService], (service: HttpService) => {
-  //   expect(service).toBeTruthy();
-  // }));
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should load new suggestion', fakeAsync(() => {
+    component.field.setValue('123');
+    tick(500);
+    expect(httpServiceMock.loadVideosSuggestions).toHaveBeenCalled();
+  }));
+
+  it('should return results of 123', fakeAsync(() => {
+    component.field.setValue(123);
+    tick(500);
+    expect(component.field.value).toBe(123);
+  }));
 });
