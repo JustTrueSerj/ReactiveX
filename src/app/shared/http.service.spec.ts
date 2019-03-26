@@ -1,52 +1,43 @@
-import {inject, TestBed} from '@angular/core/testing';
-
 import {HttpService} from './http.service';
-import {HttpClientTestingModule, HttpTestingController, HttpTestingController} from '@angular/common/http/testing';
-import {Observable} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {Observable, of} from 'rxjs';
 import {ResponseResultModel} from './response-result.model';
-import {HttpClient} from '@angular/common/http';
+import {ItemsModel} from './items.model';
 
 class MockHttpService {
-  constructor(private http: HttpClient) {
-
-  }
-
-  loadVideosSuggestions(searchString) {
-    return new Observable();
+  static loadVideosSuggestions(searchString: string): Observable<{ etag: string; items: { etag: string; id: { kind: string; videoId: string }[]; kind: string }[]; kind: string; nextPageToken: string; pageInfo: {}; regionCode: string }> {
+    return of(mockResponseResult);
   }
 }
 
-describe('HttpService', () => {
-  let service: MockHttpService;
-  let backend: HttpTestingController;
-  let mockResult: Observable<ResponseResultModel>;
+let testService: MockHttpService;
+let mockResponseResult: { etag: string; items: { etag: string; id: { kind: string; videoId: string }[]; kind: string }[]; kind: string; nextPageToken: string; pageInfo: {}; regionCode: string };
+
+describe('Http Service', () => {
   beforeEach(() => {
-    service = MockHttpService;
-    backend = HttpTestingController;
-    mockResult = Observable;
-
     TestBed.configureTestingModule({
-      providers: [MockHttpService],
-      imports: [HttpClientTestingModule],
+       providers: [MockHttpService]
     });
+    testService = TestBed.get(MockHttpService);
+    mockResponseResult = {
+      etag: '123',
+      items: [
+        {
+          etag: '123',
+          id: [{
+            kind: '123',
+            videoId: '11111'
+          }],
+          kind: '123'
+        }],
+      kind: '1234',
+      nextPageToken: '12345',
+      pageInfo: {},
+      regionCode: '12345677'
+    };
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('Should return Observable', () => {
+    expect(MockHttpService.loadVideosSuggestions('123')).toEqual(of(mockResponseResult));
   });
-
-  it('should return Observable of results from API', () => {
-    service.loadVideosSuggestions(123).subscribe(videos => {
-      expect(videos).toEqual(mockResult);
-    });
-  });
-
-  it('should be backend', () => {
-    backend.expectOne({
-      method: 'GET',
-      url: `https://www.googleapis.com/youtube/v3/search?part=id&q=123&type=video&key=AIzaSyAKREge49ewyVbq81za_vf0FinDEH1vq1w`
-    }).flush(mockResult);
-  });
-
 });
-
