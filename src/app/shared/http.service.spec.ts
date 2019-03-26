@@ -1,19 +1,23 @@
 import {TestBed} from '@angular/core/testing';
 import {ItemsModel} from './items.model';
 import {Observable, of} from 'rxjs';
+import {ResponseResultModel} from './response-result.model';
 
 class MockHttpService {
-  static loadVideosSuggestions(searchString: string): Observable<ItemsModel[]> {
+  static loadVideosSuggestions(searchString: string): Observable<ResponseResultModel> {
     console.log(searchString);
     return of(expectedData);
   }
 }
 
-const expectedData: ItemsModel[] = [
-  {etag: '123', kind: '1234', id: null},
-  {etag: '1234', kind: '12345', id: null},
-  {etag: '12345', kind: '123456', id: null}
-];
+const expectedData: ResponseResultModel = {
+  etag: '123',
+  items: null,
+  kind: '123',
+  nextPageToken: '123',
+  pageInfo: null,
+  regionCode: null
+};
 
 describe('Http Service', () => {
   beforeEach(() => {
