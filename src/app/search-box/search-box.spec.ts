@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
 import {SearchBoxComponent} from './search-box.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -10,8 +10,8 @@ describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
   let fixture: ComponentFixture<SearchBoxComponent>;
   const httpServiceMock = {
-    loadVideosSuggestions() {
-      return of({});
+    loadVideosSuggestions(testString) {
+      return of({field: testString});
     }
   };
   beforeEach(async(() => {
@@ -46,6 +46,7 @@ describe('SearchBoxComponent', () => {
   it('should return results of 123', fakeAsync(() => {
     component.field.setValue(123);
     tick(500);
-    expect(component.field.value).toBe(123);
+    expect(httpServiceMock.loadVideosSuggestions).toHaveBeenCalledWith(123);
   }));
 });
+
