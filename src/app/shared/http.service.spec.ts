@@ -6,7 +6,7 @@ import {ResponseResultModel} from './response-result.model';
 describe('HttpService', () => {
   const httpServiceMock = {
     loadVideosSuggestions() {
-      return of(new Observable<ResponseResultModel>());
+      return of({etag: '123'});
     }
   };
   let httpServiceInstance: HttpService;
@@ -23,7 +23,7 @@ describe('HttpService', () => {
   });
   it('Http returns Observable', done => {
     httpServiceInstance.loadVideosSuggestions(123).subscribe(value => {
-      expect(value).toBe(value as ResponseResultModel);
+      expect(value.etag).toBe('123');
       done();
     });
   });
