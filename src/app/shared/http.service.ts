@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ResponseResultModel} from './response-result.model';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {ItemsModel} from './items.model';
+import {IdModel} from './id.model';
 
 @Injectable()
 export class HttpService {
@@ -9,7 +11,64 @@ export class HttpService {
 
   }
 
-  loadVideosSuggestions(searchString) {
+  loadVideosSuggestions(value): Observable<ResponseResultModel> {
+    return of({
+      etag: 'etag',
+      items: [
+        {
+          etag: 'etag',
+          id:
+            {
+              kind: 'kind',
+              videoId: 'FirstVideo'
+            },
+          kind: 'kind'
+        },
+        {
+          etag: 'etag',
+          id:
+            {
+              kind: 'kind',
+              videoId: 'SecVideo'
+            },
+          kind: 'kind'
+        },
+        {
+          etag: 'etag',
+          id:
+            {
+              kind: 'kind',
+              videoId: 'ThirdVideo'
+            },
+          kind: 'kind'
+        },
+        {
+          etag: 'etag',
+          id:
+            {
+              kind: 'kind',
+              videoId: 'FourVideo'
+            },
+          kind: 'kind'
+        },
+        {
+          etag: 'etag',
+          id:
+            {
+              kind: 'kind',
+              videoId: 'FiveVideo'
+            },
+          kind: 'kind'
+        }
+      ] as ItemsModel[],
+      kind: 'kind',
+      nextPageToken: 'nextPage',
+      pageInfo: {},
+      regionCode: 'region code',
+    });
+  }
+
+  loadVideosSuggestionsFromApi(searchString) {
     return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=id&q=${searchString}&type=video&key=AIzaSyAKREge49ewyVbq81za_vf0FinDEH1vq1w`) as Observable<ResponseResultModel>;
   }
 }
