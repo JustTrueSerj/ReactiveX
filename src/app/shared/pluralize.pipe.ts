@@ -11,7 +11,7 @@ export class PluralizePipe implements PipeTransform {
     const byHundred = value % 100;
 
     if (byHundred >= 11 || byHundred >= 20) {
-      return `Найдено ${value} ${many}`;
+      return `Найдено - ${value} ${many}`;
     }
 
     let option = many;
@@ -29,6 +29,6 @@ export class PluralizePipe implements PipeTransform {
         break;
     }
 
-    return `Найдено ${value} ${option}`;
+    return `Найдено - ${value} ${option}`;
   }
 }
