@@ -5,6 +5,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpService} from '../shared/http.service';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {of} from 'rxjs';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {LabelDirective} from '../shared/label.directive';
+import {PluralizePipe} from '../shared/pluralize.pipe';
 
 describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
@@ -17,7 +20,7 @@ describe('SearchBoxComponent', () => {
   beforeEach(async(() => {
     spyOn(httpServiceMock, 'loadVideosSuggestions').and.returnValue(of({a: 10}));
     TestBed.configureTestingModule({
-      declarations: [SearchBoxComponent],
+      declarations: [SearchBoxComponent, LabelDirective, PluralizePipe],
       imports: [FormsModule, ReactiveFormsModule, BrowserDynamicTestingModule],
       providers: [
         {

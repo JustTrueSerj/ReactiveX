@@ -11,7 +11,7 @@ export class HttpService {
 
   }
 
-  loadVideosSuggestions(value): Observable<ResponseResultModel> {
+  loadVideosSuggestions(value: string): Observable<ResponseResultModel> {
     return of({
       etag: 'etag',
       items: [
@@ -63,7 +63,7 @@ export class HttpService {
       ] as ItemsModel[],
       kind: 'kind',
       nextPageToken: 'nextPage',
-      pageInfo: {},
+      pageInfo: {try: 'try'},
       regionCode: 'region code',
     });
   }
