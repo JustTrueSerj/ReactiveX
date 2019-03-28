@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpService} from '../shared/http.service';
 import {CommonModule} from '@angular/common';
 import {AutofocusDirective} from '../shared/autofocus.directive';
+import {LabelDirective} from '../shared/label.directive';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import {AutofocusDirective} from '../shared/autofocus.directive';
     FormsModule,
     CommonModule],
   exports: [SearchBoxComponent],
-  declarations: [SearchBoxComponent, AutofocusDirective],
+  declarations: [SearchBoxComponent, AutofocusDirective, LabelDirective],
   providers: [HttpService],
 })
 export class SearchBoxModule {
