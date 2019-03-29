@@ -6,6 +6,7 @@ import {SearchBoxModule} from './search-box/search-box.module';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpService} from './shared/http.service';
 import {FormsModule} from '@angular/forms';
+import {RadioChangerModule} from './radio-changer/radio-changer.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {FormsModule} from '@angular/forms';
     BrowserModule,
     SearchBoxModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    RadioChangerModule,
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
