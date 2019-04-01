@@ -7,16 +7,14 @@ import {CommunicateService} from '../../shared/communicate.service';
   styleUrls: [`./radio-changer.component.scss`]
 })
 export class RadioChangerComponent implements OnInit {
-
   constructor(private communicateService: CommunicateService) {
-
   }
 
   ngOnInit() {
     this.communicateService.sendValue('All');
   }
 
-  onSelectOption(value) {
+  onSelectOption(value: string) {
     this.communicateService.sendValue(value);
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: `app-wrapper`,
@@ -6,7 +6,7 @@ import {Component, Input} from '@angular/core';
   styleUrls: [`./wrapper.component.scss`]
 })
 export class WrapperComponent {
-  @Input() radioValue: string;
+  radioValue: string;
   confirmRadioValue(event) {
     this.radioValue = event;
   }

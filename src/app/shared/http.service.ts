@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ResponseResultModel} from './response-result.model';
 import {Observable, of} from 'rxjs';
 import {ItemsModel} from './items.model';
+import {filter, map} from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
@@ -10,7 +11,7 @@ export class HttpService {
 
   }
 
-  loadVideosSuggestions(value: string): Observable<ResponseResultModel> {
+  loadVideosSuggestions(value: string, radioSelector: string): Observable<ResponseResultModel> {
     return of({
       etag: 'etag',
       items: [
@@ -64,7 +65,14 @@ export class HttpService {
       nextPageToken: 'nextPage',
       pageInfo: {try: 'try'},
       regionCode: 'region code',
-    });
+    }).pipe(
+      map((stream$) => {
+        if (radioSelector !== 'All') {
+          stream$.items = stream$.items.filter(filteredValue => filteredValue.etag === radioSelector);
+        }
+        return stream$;
+      }));
+    // result$.subscribe(x => console.log(x));
   }
 
   loadVideosSuggestionsFromApi(searchString) {

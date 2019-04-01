@@ -5,10 +5,10 @@ import {Subject} from 'rxjs';
   providedIn: 'root'
 })
 export class CommunicateService {
-  private radioSource = new Subject<string>();
-  radioValue$ = this.radioSource.asObservable();
+  private radioSource$ = new Subject<string>();
+  radioValue$ = this.radioSource$.asObservable();
 
-  sendValue(value) {
-    this.radioSource.next(value);
+  sendValue(value: string) {
+    this.radioSource$.next(value);
   }
 }
