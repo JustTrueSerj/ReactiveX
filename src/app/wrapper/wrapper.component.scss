@@ -1,0 +1,18 @@
+.addDisplay{
+  transition: all ease 2s;
+}
+
+.wrapper {
+  border: 1px solid orange;
+  flex-flow: column;
+  position: relative;
+  .radioValue {
+    transition: all ease 2s;
+  }
+}
+
+app-radio-changer {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}

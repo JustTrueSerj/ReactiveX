@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {ResponseResultModel} from './response-result.model';
 import {Observable, of} from 'rxjs';
 import {ItemsModel} from './items.model';
-import {IdModel} from './id.model';
 
 @Injectable()
 export class HttpService {
@@ -16,7 +15,7 @@ export class HttpService {
       etag: 'etag',
       items: [
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',
@@ -25,7 +24,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',
@@ -34,7 +33,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video',
           id:
             {
               kind: 'kind',
@@ -43,7 +42,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video',
           id:
             {
               kind: 'kind',
@@ -52,7 +51,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',

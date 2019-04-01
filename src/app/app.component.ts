@@ -6,9 +6,4 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @Input() radioValue: string;
-
-  confirmRadioValue(event) {
-    this.radioValue = event;
-  }
 }

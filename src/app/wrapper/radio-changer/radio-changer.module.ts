@@ -6,11 +6,9 @@ import {CommonModule} from '@angular/common';
   imports: [
     CommonModule
   ],
-
   declarations: [
     RadioChangerComponent
   ],
-
   exports: [RadioChangerComponent]
 })
 export class RadioChangerModule {

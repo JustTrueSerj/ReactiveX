@@ -2,12 +2,12 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 
 import {SearchBoxComponent} from './search-box.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpService} from '../shared/http.service';
+import {HttpService} from '../../shared/http.service';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 import {of} from 'rxjs';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {LabelDirective} from '../shared/label.directive';
-import {PluralizePipe} from '../shared/pluralize.pipe';
+import {LabelDirective} from '../../shared/label.directive';
+import {PluralizePipe} from '../../shared/pluralize.pipe';
 
 describe('SearchBoxComponent', () => {
   let component: SearchBoxComponent;
