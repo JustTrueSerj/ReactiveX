@@ -1,7 +1,7 @@
-import {Component, DoCheck, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {combineLatest, Observable, Subscription, } from 'rxjs';
-import {distinctUntilChanged, debounceTime, filter, switchMap, map, withLatestFrom} from 'rxjs/operators';
+import {distinctUntilChanged, debounceTime, filter, switchMap, map} from 'rxjs/operators';
 import {HttpService} from '../../shared/http.service';
 import {ItemsModel} from '../../shared/items.model';
 import {ChangeDetectionStrategy} from '@angular/core';
@@ -13,7 +13,7 @@ import {CommunicateService} from '../../shared/communicate.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./search-box.component.scss'],
 })
-export class SearchBoxComponent implements OnInit, OnDestroy, DoCheck {
+export class SearchBoxComponent implements OnInit, OnDestroy {
   @Output() radioValueToWrapper = new EventEmitter<string>();
   field = new FormControl('');
   searchResults$: Observable<ItemsModel[]>;
@@ -24,30 +24,30 @@ export class SearchBoxComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnInit() {
-    this.communicate = this.communicateService.radioValue$.subscribe(value => {
-      this.radioValue = value;
-      // console.log(this.radioValue);
-
-      this.radioValueToWrapper.emit(value);
-    });
-    this.searchResults$ = this.field.valueChanges.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      filter(value => value.length > 3),
-      switchMap(value => this.http.loadVideosSuggestions(value, this.radioValue)),
-      map(({items}) => items));
+    // this.communicate = this.communicateService.radioValue$.subscribe(value => {
+    //   this.radioValue = value;
+    //   // console.log(this.radioValue);
+    //
+    //   this.radioValueToWrapper.emit(value);
+    // });
+    // this.searchResults$ = this.field.valueChanges.pipe(
+    //   debounceTime(500),
+    //   distinctUntilChanged(),
+    //   filter(value => value.length > 3),
+    //   switchMap(value => this.http.loadVideosSuggestions(value, this.radioValue)),
+    //   map(({items}) => items));
 
     combineLatest(
+      // this.communicateService.radioValue$,
+      // this.searchResults$,
       this.communicateService.radioValue$,
-      this.searchResults$,
-    );
-  }
-
-  ngDoCheck() {
-    // combineLatest(
-    //   this.communicateService.radioValue$,
-    //   this.searchResults$,
-    // ).subscribe(x => console.log(x));
+      this.field.valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        filter(value => value.length > 3),
+        switchMap(value => this.http.loadVideosSuggestions(value, this.communicateService.radioValue$ )),
+        map(({items}) => items))
+    ).subscribe( x => console.log(x));
   }
 
   ngOnDestroy() {

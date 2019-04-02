@@ -66,12 +66,13 @@ export class HttpService {
       pageInfo: {try: 'try'},
       regionCode: 'region code',
     }).pipe(
-      map((stream$) => {
-        if (radioSelector !== 'All') {
-          stream$.items = stream$.items.filter(filteredValue => filteredValue.etag === radioSelector);
+      map((result) => {
+          return radioSelector === 'All'
+            ? result
+            : new changeValues(result, radioSelector);
         }
-        return stream$;
-      }));
+      ))
+      ;
     // result$.subscribe(x => console.log(x));
   }
 
@@ -79,3 +80,15 @@ export class HttpService {
     return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=id&q=${searchString}&type=video&key=AIzaSyAKREge49ewyVbq81za_vf0FinDEH1vq1w`) as Observable<ResponseResultModel>;
   }
 }
+
+function changeValues(result, radioSelector) {
+  for (const field in result) {
+    if (result.hasOwnProperty(field)) {
+      field !== 'items'
+        ? this[field] = field
+        : this[field] = result.items.filter(value => value.etag === radioSelector);
+    }
+  }
+  return result;
+}
+
