@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ResponseResultModel} from './response-result.model';
 import {Observable, of} from 'rxjs';
 import {ItemsModel} from './items.model';
-import {filter, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
@@ -66,16 +66,12 @@ export class HttpService {
       pageInfo: {try: 'try'},
       regionCode: 'region code',
     }).pipe(
-       map(object => {...object, items: object.items.filter(item => item.etag === radioSelector)})
-      // map((result) => {
-      //     return radioSelector === 'All'
-      //       ? result
-      //       : new changeValues(result, radioSelector);
-      //   }
-      // )
-  )
-      ;
-    // result$.subscribe(x => console.log(x));
+      map((result) => {
+          return radioSelector === 'All'
+            ? result
+            : new changeValues(result, radioSelector);
+        }
+      ));
   }
 
   loadVideosSuggestionsFromApi(searchString) {
@@ -91,6 +87,6 @@ function changeValues(result, radioSelector) {
         : this[field] = result.items.filter(value => value.etag === radioSelector);
     }
   }
-  return result;
+  return this;
 }
 

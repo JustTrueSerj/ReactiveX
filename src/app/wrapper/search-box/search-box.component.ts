@@ -1,6 +1,6 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {combineLatest, Observable, Subscription,} from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
 import {distinctUntilChanged, debounceTime, filter, switchMap, map} from 'rxjs/operators';
 import {HttpService} from '../../shared/http.service';
 import {ItemsModel} from '../../shared/items.model';
@@ -13,46 +13,28 @@ import {CommunicateService} from '../../shared/communicate.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./search-box.component.scss'],
 })
-export class SearchBoxComponent implements OnInit, OnDestroy {
+export class SearchBoxComponent implements OnInit {
   @Output() radioValueToWrapper = new EventEmitter<string>();
   field = new FormControl('');
   searchResults$: Observable<ItemsModel[]>;
-  communicate: Subscription;
-  radioValue: string;
 
   constructor(private http: HttpService, private communicateService: CommunicateService) {
   }
 
   ngOnInit() {
-    // this.communicate = this.communicateService.radioValue$.subscribe(value => {
-    //   this.radioValue = value;
-    //   // console.log(this.radioValue);
-    //
-    //   this.radioValueToWrapper.emit(value);
-    // });
-    // this.searchResults$ = this.field.valueChanges.pipe(
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   filter(value => value.length > 3),
-    //   switchMap(value => this.http.loadVideosSuggestions(value, this.radioValue)),
-    //   map(({items}) => items));
-
     this.searchResults$ = combineLatest(
-      // this.communicateService.radioValue$,
-      // this.searchResults$,
-      this.communicateService.radioValue$,
       this.field.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        filter(value => value.length > 3),
-        switchMap(value => this.http.loadVideosSuggestions(value, 'All')),
-        map(({items}) => items)),
-      (one, two) => {
-        return two.filter(arg => arg.etag === one);
-      });
-  }
-
-  ngOnDestroy() {
-    this.communicate.unsubscribe();
+        filter(value => value.length > 3)
+      ),
+      this.communicateService.radioValue$,
+    ).pipe(
+      switchMap(([search, radio]) => {
+        this.radioValueToWrapper.emit(radio);
+        return this.http.loadVideosSuggestions(search, radio);
+      }),
+      map(({items}) => items)
+    );
   }
 }
