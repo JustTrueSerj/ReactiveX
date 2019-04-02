@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {combineLatest, Observable, Subscription, } from 'rxjs';
+import {combineLatest, Observable, Subscription,} from 'rxjs';
 import {distinctUntilChanged, debounceTime, filter, switchMap, map} from 'rxjs/operators';
 import {HttpService} from '../../shared/http.service';
 import {ItemsModel} from '../../shared/items.model';
@@ -37,7 +37,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
     //   switchMap(value => this.http.loadVideosSuggestions(value, this.radioValue)),
     //   map(({items}) => items));
 
-    combineLatest(
+    this.searchResults$ = combineLatest(
       // this.communicateService.radioValue$,
       // this.searchResults$,
       this.communicateService.radioValue$,
@@ -45,9 +45,11 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
         debounceTime(500),
         distinctUntilChanged(),
         filter(value => value.length > 3),
-        switchMap(value => this.http.loadVideosSuggestions(value, this.communicateService.radioValue$ )),
-        map(({items}) => items))
-    ).subscribe( x => console.log(x));
+        switchMap(value => this.http.loadVideosSuggestions(value, 'All')),
+        map(({items}) => items)),
+      (one, two) => {
+        return two.filter(arg => arg.etag === one);
+      });
   }
 
   ngOnDestroy() {

@@ -66,12 +66,14 @@ export class HttpService {
       pageInfo: {try: 'try'},
       regionCode: 'region code',
     }).pipe(
-      map((result) => {
-          return radioSelector === 'All'
-            ? result
-            : new changeValues(result, radioSelector);
-        }
-      ))
+       map(object => {...object, items: object.items.filter(item => item.etag === radioSelector)})
+      // map((result) => {
+      //     return radioSelector === 'All'
+      //       ? result
+      //       : new changeValues(result, radioSelector);
+      //   }
+      // )
+  )
       ;
     // result$.subscribe(x => console.log(x));
   }
