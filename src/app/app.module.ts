@@ -2,10 +2,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {SearchBoxModule} from './search-box/search-box.module';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpService} from './shared/http.service';
 import {FormsModule} from '@angular/forms';
+import {WrapperModule} from './wrapper/wrapper.module';
+import {CommunicateService} from './shared/communicate.service';
 
 @NgModule({
   declarations: [
@@ -13,9 +14,9 @@ import {FormsModule} from '@angular/forms';
   ],
   imports: [
     BrowserModule,
-    SearchBoxModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    WrapperModule
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
