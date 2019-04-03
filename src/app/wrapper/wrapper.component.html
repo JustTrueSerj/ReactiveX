@@ -1,5 +1,5 @@
 <section class="wrapper">
-  <h3 class="radioValue">Отображается категория - {{radioValue}}</h3>
-  <app-search-box (radioValueToWrapper)="confirmRadioValue($event)"></app-search-box>
+  <h3 class="radioValue">Отображаемая категория - {{(radioSelector | async) || 'не выбрана'}}</h3>
+  <app-search-box></app-search-box>
   <app-radio-changer></app-radio-changer>
 </section>

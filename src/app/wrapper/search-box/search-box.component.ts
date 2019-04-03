@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {combineLatest, Observable} from 'rxjs';
 import {distinctUntilChanged, debounceTime, filter, switchMap, map} from 'rxjs/operators';
@@ -14,7 +14,6 @@ import {CommunicateService} from '../../shared/communicate.service';
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-  @Output() radioValueToWrapper = new EventEmitter<string>();
   field = new FormControl('');
   searchResults$: Observable<ItemsModel[]>;
 
@@ -31,7 +30,6 @@ export class SearchBoxComponent implements OnInit {
       this.communicateService.radioValue$,
     ).pipe(
       switchMap(([search, radio]) => {
-        this.radioValueToWrapper.emit(radio);
         return this.http.loadVideosSuggestions(search, radio);
       }),
       map(({items}) => items)
