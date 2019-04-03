@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ResponseResultModel} from './response-result.model';
 import {Observable, of} from 'rxjs';
 import {ItemsModel} from './items.model';
-import {IdModel} from './id.model';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class HttpService {
@@ -11,12 +11,12 @@ export class HttpService {
 
   }
 
-  loadVideosSuggestions(value): Observable<ResponseResultModel> {
+  loadVideosSuggestions(value: string, radioSelector: string): Observable<ResponseResultModel> {
     return of({
       etag: 'etag',
       items: [
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',
@@ -25,7 +25,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',
@@ -34,7 +34,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video',
           id:
             {
               kind: 'kind',
@@ -43,7 +43,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video',
           id:
             {
               kind: 'kind',
@@ -52,7 +52,7 @@ export class HttpService {
           kind: 'kind'
         },
         {
-          etag: 'etag',
+          etag: 'Video and photo',
           id:
             {
               kind: 'kind',
@@ -63,12 +63,30 @@ export class HttpService {
       ] as ItemsModel[],
       kind: 'kind',
       nextPageToken: 'nextPage',
-      pageInfo: {},
+      pageInfo: {try: 'try'},
       regionCode: 'region code',
-    });
+    }).pipe(
+      map((result) => {
+          return radioSelector === 'All'
+            ? result
+            : new changeValues(result, radioSelector);
+        }
+      ));
   }
 
   loadVideosSuggestionsFromApi(searchString) {
     return this.http.get(`https://www.googleapis.com/youtube/v3/search?part=id&q=${searchString}&type=video&key=AIzaSyAKREge49ewyVbq81za_vf0FinDEH1vq1w`) as Observable<ResponseResultModel>;
   }
 }
+
+function changeValues(result, radioSelector) {
+  for (const field in result) {
+    if (result.hasOwnProperty(field)) {
+      field !== 'items'
+        ? this[field] = field
+        : this[field] = result.items.filter(value => value.etag === radioSelector);
+    }
+  }
+  return this;
+}
+

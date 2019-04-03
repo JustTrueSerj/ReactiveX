@@ -1,7 +1,6 @@
 import {TestBed} from '@angular/core/testing';
 import {HttpService} from './http.service';
-import {Observable, of} from 'rxjs';
-import {ResponseResultModel} from './response-result.model';
+import {of} from 'rxjs';
 
 describe('HttpService', () => {
   const httpServiceMock = {

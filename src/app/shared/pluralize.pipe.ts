@@ -6,21 +6,29 @@ import {Pipe, PipeTransform} from '@angular/core';
 export class PluralizePipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
-    if (((value % 100) / 10).toFixed(0) === 1) {
-      return 'Найдено ' + value + ' вариантов';
+    const [one, few, many] = ['вариант', 'варианта', 'вариантов'];
+    const byTen = value % 10;
+    const byHundred = value % 100;
+
+    if (byHundred >= 11 || byHundred >= 20) {
+      return `Найдено - ${value} ${many}`;
     }
-    switch (value % 10) {
+
+    let option = many;
+
+    switch (byTen) {
       case 1:
-        return 'Найдено ' + value + ' вариант';
+        option = one;
         break;
-
-      case (2 || 3 || 4):
-        return 'Найдено ' + value + ' варианта';
+      case 2:
+      case 3:
+      case 4:
+        option = few;
         break;
-
-      case (5):
-        return 'Найдено ' + value + ' вариантов';
+      default:
         break;
     }
+
+    return `Найдено - ${value} ${option}`;
   }
 }
