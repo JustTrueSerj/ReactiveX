@@ -6,6 +6,9 @@ import {HttpService} from '../../shared/http.service';
 import {ItemsModel} from '../../shared/items.model';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {CommunicateService} from '../../shared/communicate.service';
+import {select, Store} from '@ngrx/store';
+import {ResponseResultModel} from '../../shared/response-result.model';
+import {ALL, VIDEO} from '../../shared/actions/result.actions';
 
 @Component({
   selector: 'app-search-box',
@@ -16,11 +19,13 @@ import {CommunicateService} from '../../shared/communicate.service';
 export class SearchBoxComponent implements OnInit {
   field = new FormControl('');
   searchResults$: Observable<ItemsModel[]>;
-
-  constructor(private http: HttpService, private communicateService: CommunicateService) {
+  result$: Observable<ResponseResultModel>;
+  constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store<ResponseResultModel>) {
   }
 
   ngOnInit() {
+    this.result$ = this.store.pipe(select('result'));
+
     this.searchResults$ = combineLatest(
       this.field.valueChanges.pipe(
         debounceTime(500),
@@ -30,9 +35,11 @@ export class SearchBoxComponent implements OnInit {
       this.communicateService.radioValue$,
     ).pipe(
       switchMap(([search, radio]) => {
-        return this.http.loadVideosSuggestions(search, radio);
+        this.store.dispatch({type: ALL});
+        return this.result$;
       }),
       map(({items}) => items)
     );
   }
 }
+

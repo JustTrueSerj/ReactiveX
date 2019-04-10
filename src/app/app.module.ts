@@ -7,6 +7,7 @@ import {HttpService} from './shared/http.service';
 import {FormsModule} from '@angular/forms';
 import {WrapperModule} from './wrapper/wrapper.module';
 import {CommunicateService} from './shared/communicate.service';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import {CommunicateService} from './shared/communicate.service';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    WrapperModule
+    WrapperModule,
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
