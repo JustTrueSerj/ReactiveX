@@ -7,12 +7,15 @@ import {CommonModule} from '@angular/common';
 import {AutofocusDirective} from '../../shared/autofocus.directive';
 import {LabelDirective} from '../../shared/label.directive';
 import {PluralizePipe} from '../../shared/pluralize.pipe';
+import {StoreModule} from '@ngrx/store';
+import {resultReducer} from '../../ngrx/reducers/result.reducer';
 
 @NgModule({
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    CommonModule],
+    CommonModule,
+    StoreModule.forRoot({result: resultReducer})],
   exports: [SearchBoxComponent],
   declarations: [SearchBoxComponent, AutofocusDirective, LabelDirective, PluralizePipe],
   providers: [HttpService],

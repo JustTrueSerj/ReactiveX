@@ -6,6 +6,9 @@ import {HttpService} from '../../shared/http.service';
 import {ItemsModel} from '../../shared/items.model';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {CommunicateService} from '../../shared/communicate.service';
+import {select, Store} from '@ngrx/store';
+import {ALL} from '../../ngrx/actions/result.action';
+
 
 @Component({
   selector: 'app-search-box',
@@ -14,10 +17,13 @@ import {CommunicateService} from '../../shared/communicate.service';
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-  field = new FormControl('');
+  field: FormControl = new FormControl('');
   searchResults$: Observable<ItemsModel[]>;
+  result$;
+  firstWorkingResult;
 
-  constructor(private http: HttpService, private communicateService: CommunicateService) {
+  constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store) {
+    this.result$ = store.pipe(select('result'));
   }
 
   ngOnInit() {
@@ -30,6 +36,9 @@ export class SearchBoxComponent implements OnInit {
       this.communicateService.radioValue$,
     ).pipe(
       switchMap(([search, radio]) => {
+        this.store.dispatch({type: ALL});
+        this.result$.subscribe(store$ => store$.pipe(map(({items}) => items)).subscribe(res => this.firstWorkingResult = res));
+        console.log(this.firstWorkingResult);
         return this.http.loadVideosSuggestions(search, radio);
       }),
       map(({items}) => items)
