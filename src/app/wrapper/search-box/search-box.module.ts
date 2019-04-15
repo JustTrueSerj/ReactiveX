@@ -11,7 +11,6 @@ import {StoreModule} from '@ngrx/store';
 import {resultReducer} from '../../ngrx/reducers/result.reducer';
 import {EffectsModule} from '@ngrx/effects';
 import {VideoEffects} from '../../ngrx/effects/video.effects';
-import {VideoActions} from '../../ngrx/actions/result.action';
 
 @NgModule({
   imports: [

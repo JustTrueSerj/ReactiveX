@@ -1,21 +1,22 @@
-import {ALL, LOAD_VIDEOS_SUCCESS, VIDEO, VIDEO_AND_PHOTO, VideoActions, VideoLoadSuccessAction} from '../actions/result.action';
-import {Observable, of} from 'rxjs';
-import {ResponseResultModel} from '../../shared/response-result.model';
-import {Action} from '@ngrx/store';
-import {ItemsModel} from '../../shared/items.model';
-import {map} from 'rxjs/operators';
-import {Actions} from '@ngrx/effects';
+import {
+  FILTER_RESULT,
+  LOAD_VIDEOS_SUCCESS,
+  VideoActions,
+} from '../actions/result.action';
 
 const initialState = {
   videos: [],
   search: ''
 };
+let lastRequest: any;
 
 export function resultReducer(state = initialState, action: VideoActions) {
   switch (action.type) {
     case LOAD_VIDEOS_SUCCESS:
-      // console.log({...state, videos: action.payload});
+      lastRequest = action.payload;
       return {...state, videos: action.payload};
+    case FILTER_RESULT:
+      return {...state, videos: lastRequest.filter(x => x.etag === action.payload)};
     default:
       return state;
   }
