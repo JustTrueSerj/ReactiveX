@@ -9,13 +9,17 @@ import {LabelDirective} from '../../shared/label.directive';
 import {PluralizePipe} from '../../shared/pluralize.pipe';
 import {StoreModule} from '@ngrx/store';
 import {resultReducer} from '../../ngrx/reducers/result.reducer';
+import {EffectsModule} from '@ngrx/effects';
+import {VideoEffects} from '../../ngrx/effects/video.effects';
+import {VideoActions} from '../../ngrx/actions/result.action';
 
 @NgModule({
   imports: [
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
-    StoreModule.forRoot({result: resultReducer})],
+    EffectsModule.forRoot([VideoEffects]),
+    StoreModule.forRoot({videos: resultReducer})],
   exports: [SearchBoxComponent],
   declarations: [SearchBoxComponent, AutofocusDirective, LabelDirective, PluralizePipe],
   providers: [HttpService],

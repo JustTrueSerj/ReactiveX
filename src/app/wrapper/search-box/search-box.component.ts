@@ -7,7 +7,8 @@ import {ItemsModel} from '../../shared/items.model';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {CommunicateService} from '../../shared/communicate.service';
 import {select, Store} from '@ngrx/store';
-import {ALL} from '../../ngrx/actions/result.action';
+import {ALL, VideoSearchAction} from '../../ngrx/actions/result.action';
+import {All} from 'tslint/lib/rules/completedDocsRule';
 
 
 @Component({
@@ -18,30 +19,40 @@ import {ALL} from '../../ngrx/actions/result.action';
 })
 export class SearchBoxComponent implements OnInit {
   field: FormControl = new FormControl('');
-  searchResults$: Observable<ItemsModel[]>;
-  result$;
-  firstWorkingResult;
+  videos$ = this.store.pipe(select('videos'));
 
   constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store) {
-    this.result$ = store.pipe(select('result'));
   }
 
   ngOnInit() {
-    this.searchResults$ = combineLatest(
-      this.field.valueChanges.pipe(
+    this.store.dispatch({type: ALL});
+    this.field.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
         filter(value => value.length > 3)
-      ),
-      this.communicateService.radioValue$,
-    ).pipe(
-      switchMap(([search, radio]) => {
-        this.store.dispatch({type: ALL});
-        this.result$.subscribe(store$ => store$.pipe(map(({items}) => items)).subscribe(res => this.firstWorkingResult = res));
-        console.log(this.firstWorkingResult);
-        return this.http.loadVideosSuggestions(search, radio);
-      }),
-      map(({items}) => items)
-    );
+      ).subscribe(value => {
+        console.log(value);
+        this.store.dispatch(new VideoSearchAction(value));
+        // this.videos$.subscribe(x => console.log(x));
+    });
+    // console.log(this.videos$);
+
+
+    // this.searchResults$ = combineLatest(
+    //   this.field.valueChanges.pipe(
+    //     debounceTime(500),
+    //     distinctUntilChanged(),
+    //     filter(value => value.length > 3)
+    //   ),
+    //   this.communicateService.radioValue$,
+    // ).pipe(
+    //   switchMap(([search, radio]) => {
+    //     this.store.dispatch({type: ALL});
+    //     this.result$.subscribe(store$ => store$.pipe(map(({items}) => items)).subscribe(res => this.firstWorkingResult = res));
+    //     console.log(this.firstWorkingResult);
+    //     return this.http.loadVideosSuggestions(search, radio);
+    //   }),
+    //   map(({items}) => items)
+    // );
   }
 }
