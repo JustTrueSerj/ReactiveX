@@ -1,16 +1,14 @@
-import { createSelector } from '@ngrx/store';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 
-export interface FeatureState {
-  videos: any;
-}
+export const selectVideos = createFeatureSelector<AppState>(
+  'videos'
+);
 
 export interface AppState {
-  feature: FeatureState;
+  videos: [];
 }
 
-export const selectFeature = (state: AppState) => state.feature;
-
-export const selectFeatureCount = createSelector(
-  selectFeature,
-  (state: FeatureState) => state.videos
+export const selectVideosList = createSelector(
+  selectVideos,
+  (state: AppState) => state.videos
 );

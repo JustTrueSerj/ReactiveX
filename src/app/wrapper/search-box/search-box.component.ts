@@ -15,7 +15,7 @@ import {ALL, VideoSearchAction} from '../../ngrx/actions/result.action';
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-  field: FormControl = new FormControl('');
+  field = new FormControl('');
   videos$ = this.store.pipe(select(fromRoot.selectFeatureCount,));
 
   constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store) {
