@@ -16,7 +16,7 @@ import {ALL, VideoSearchAction} from '../../ngrx/actions/result.action';
 })
 export class SearchBoxComponent implements OnInit {
   field: FormControl = new FormControl('');
-  videos$ = this.store.pipe(select('videos'));
+  videos$ = this.store.pipe(select(fromRoot.selectFeatureCount,));
 
   constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store) {
   }
