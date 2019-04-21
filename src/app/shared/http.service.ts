@@ -67,7 +67,6 @@ export class HttpService {
       regionCode: 'region code',
     }).pipe(
       map((result) => {
-        console.log(value);
           return radioSelector === 'All'
             ? result
             : new changeValues(result, radioSelector);

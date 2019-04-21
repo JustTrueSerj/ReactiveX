@@ -6,6 +6,7 @@ import {ChangeDetectionStrategy} from '@angular/core';
 import {CommunicateService} from '../../shared/communicate.service';
 import {select, Store} from '@ngrx/store';
 import {ALL, VideoSearchAction} from '../../ngrx/actions/result.action';
+import {selectFeatureVideos} from '../../ngrx/selectors/selector';
 
 
 @Component({
@@ -15,8 +16,8 @@ import {ALL, VideoSearchAction} from '../../ngrx/actions/result.action';
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-  field = new FormControl('');
-  videos$ = this.store.pipe(select(fromRoot.selectFeatureCount,));
+  field: FormControl = new FormControl('');
+  videos$ = this.store.pipe(select(selectFeatureVideos));
 
   constructor(private http: HttpService, private communicateService: CommunicateService, private store: Store) {
   }
